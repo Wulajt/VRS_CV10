@@ -79,7 +79,7 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 
-   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
 
   NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
@@ -115,12 +115,12 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  uint8_t length = strlen("mode: \n\r") + snprintf( NULL, 0, "%d", mode_auto);
+	  uint8_t length = strlen("mode: \n\r") + snprintf( NULL, 0, "%d", number);
 	  uint8_t *text = (uint8_t *) malloc(length + 1);
-	  snprintf(text, length + 1, c, mode_auto);
+	  snprintf(text, length + 1, c, number);
 
-	//USART2_CheckDmaReception();
-	USART2_PutBuffer(text, length+1);
+	// USART2_CheckDmaReception();
+	// USART2_PutBuffer(text, length+1);
 	/* USER CODE BEGIN 3 */
 	LL_mDelay(10000);
   }
@@ -166,29 +166,45 @@ void processDMAData(const uint8_t *data, uint8_t length){
 	uint8_t *cmd_manual = "manual";
 	uint8_t *cmd_pwm = "PWM";
 
-	    if (data[0] == '$' && data[length - 2] == '$'){
+	uint8_t start_parsing = 0;
+	uint8_t start_idx = 0;
+	uint8_t end_idx = 0;
+	uint8_t is_cmd = 0;
 
-	        uint8_t *temp_data = (uint8_t *) malloc(length - 3);
+	for (uint8_t i = 0; i < length; i++){
 
-	        for (uint8_t i = 0; i < (length - 3); i++){
-	            temp_data[i] = data[i + 1];
+	        if (data[i] == '$' && !start_parsing){
+	            start_parsing = 1;
+	            start_idx = i + 1;
 	        }
-
-	        temp_data[length -3] = '\0';
-
-	        if (strcmp(cmd_auto, temp_data) == 0){
-	            mode_auto = 1;
-	        }
-	        else if (strcmp(cmd_manual, temp_data) == 0){
-	            mode_auto = 0;
-	        }
-
-	        if (!mode_auto && strlen(temp_data) == 5 && strncmp(cmd_pwm, temp_data, 3)==0){
-	                        uint8_t decimals = temp_data[3]-48;
-	                        uint8_t ones = temp_data[4]-48;
-	                        setDutyCycle(decimals*10 + ones);
+	        else if (data[i] == '$' && start_parsing){
+	            start_parsing = 0;
+	            end_idx = i - 1;
+	            is_cmd = 1;
 	        }
 	    }
+
+	    if (is_cmd){
+	    uint8_t data_length = end_idx - start_idx + 1;
+	    uint8_t *temp_data = (uint8_t *) malloc(data_length + 1);
+	    strncpy(temp_data, (data + start_idx), data_length);
+	    temp_data[data_length] = '\0';
+
+	    if (strcmp(cmd_auto, temp_data) == 0){
+       	    mode_auto = 1;
+	    }
+	    else if (strcmp(cmd_manual, temp_data) == 0){
+	   	    mode_auto = 0;
+	    }
+
+	    if (!mode_auto && strlen(temp_data) == 5 && strncmp(cmd_pwm, temp_data, 3)==0){
+	    	uint8_t decimals = temp_data[3]-48;
+	    	uint8_t ones = temp_data[4]-48;
+	    	if((0 <= decimals <= 9) && (0 <= ones <= 9)){
+	    		new_pwm = decimals*10 + ones;
+	    	}
+	    }
+   }
 }
 
 /* USER CODE END 4 */

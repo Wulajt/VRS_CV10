@@ -13,6 +13,6 @@ stm32f3xx_ll_tim.h:3373:22:LL_TIM_SetClockSource	16	static
 stm32f3xx_ll_tim.h:3419:22:LL_TIM_SetTriggerOutput	16	static
 stm32f3xx_ll_tim.h:3519:22:LL_TIM_DisableMasterSlaveMode	16	static
 stm32f3xx_ll_tim.h:4421:22:LL_TIM_EnableIT_UPDATE	16	static
-tim.c:31:6:MX_TIM2_Init	88	static
+tim.c:33:6:MX_TIM2_Init	88	static
 tim.c:80:6:TIM2_ProcessPWM	8	static
-tim.c:98:6:setDutyCycle	24	static
+tim.c:104:6:setDutyCycle	24	static

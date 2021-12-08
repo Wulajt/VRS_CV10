@@ -27,6 +27,6 @@ stm32f3xx_ll_usart.h:3364:22:LL_USART_EnableDMAReq_RX	40	static,ignoring_inline_
 stm32f3xx_ll_usart.h:3397:22:LL_USART_EnableDMAReq_TX	40	static,ignoring_inline_asm
 stm32f3xx_ll_usart.h:3467:26:LL_USART_DMA_GetRegAddr	24	static
 usart.c:30:6:USART2_RegisterCallback	16	static
-usart.c:44:6:MX_USART2_UART_Init	80	static
-usart.c:137:6:USART2_PutBuffer	16	static
-usart.c:154:6:USART2_CheckDmaReception	16	static
+usart.c:43:6:MX_USART2_UART_Init	80	static
+usart.c:122:6:USART2_PutBuffer	16	static
+usart.c:139:6:USART2_CheckDmaReception	16	static

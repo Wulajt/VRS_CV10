@@ -38,6 +38,7 @@ extern "C" {
 void MX_TIM2_Init(void);
 void TIM2_ProcessPWM(void);
 uint8_t mode_auto;
+uint8_t new_pwm;
 
 /* USER CODE BEGIN Prototypes */
 

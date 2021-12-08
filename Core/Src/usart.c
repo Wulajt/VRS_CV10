@@ -40,7 +40,6 @@ void USART2_RegisterCallback(void *callback)
 	// type global variables here
 
 
-/* USART2 init function */
 void MX_USART2_UART_Init(void)
 {
   LL_USART_InitTypeDef USART_InitStruct = {0};
@@ -62,16 +61,9 @@ void MX_USART2_UART_Init(void)
   GPIO_InitStruct.Alternate = LL_GPIO_AF_7;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*
-   * USART2 DMA configuration. Write configuration for DMA used by USART2 for data Rx/Tx with INTERRUPTS.
-   * Rx memory buffer will be handled in normal mode, not circular!
-   * You can use configuration from example program and modify it.
-   * For more information about DMA registers, refer to reference manual.
-   */
+  /* USART2 DMA Init */
 
   /* USART2_RX Init */
-
-  	  // type DMA USART Rx configuration here
   LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_CHANNEL_6, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
   LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_6, LL_DMA_PRIORITY_MEDIUM);
   LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_6, LL_DMA_MODE_CIRCULAR);
@@ -81,9 +73,9 @@ void MX_USART2_UART_Init(void)
   LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_6, LL_DMA_MDATAALIGN_BYTE);
 
   LL_DMA_ConfigAddresses(	DMA1, LL_DMA_CHANNEL_6,
-		  LL_USART_DMA_GetRegAddr(USART2, LL_USART_DMA_REG_DATA_RECEIVE),
-		  (uint32_t)bufferUSART2dma,
-		  LL_DMA_GetDataTransferDirection(DMA1, LL_DMA_CHANNEL_6));
+						 	LL_USART_DMA_GetRegAddr(USART2, LL_USART_DMA_REG_DATA_RECEIVE),
+							(uint32_t)bufferUSART2dma,
+							LL_DMA_GetDataTransferDirection(DMA1, LL_DMA_CHANNEL_6));
 
   LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_6, DMA_USART2_BUFFER_SIZE);
   LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_6);
@@ -92,10 +84,7 @@ void MX_USART2_UART_Init(void)
   LL_DMA_EnableIT_TC(DMA1, LL_DMA_CHANNEL_6);
   LL_DMA_EnableIT_HT(DMA1, LL_DMA_CHANNEL_6);
 
-
   /* USART2_TX Init */
-
-	  // type DMA USART Tx configuration here
   LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_CHANNEL_7, LL_DMA_DIRECTION_MEMORY_TO_PERIPH);
   LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_7, LL_DMA_PRIORITY_MEDIUM);
   LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_7, LL_DMA_MODE_NORMAL);
@@ -121,12 +110,8 @@ void MX_USART2_UART_Init(void)
   USART_InitStruct.HardwareFlowControl = LL_USART_HWCONTROL_NONE;
   USART_InitStruct.OverSampling = LL_USART_OVERSAMPLING_16;
   LL_USART_Init(USART2, &USART_InitStruct);
-  LL_USART_ConfigAsyncMode(USART2);
   LL_USART_DisableIT_CTS(USART2);
 
-  /* Enable USART2 peripheral and interrupts*/
-
-  	  //type your code here:
   LL_USART_EnableIT_IDLE(USART2);
   LL_USART_ConfigAsyncMode(USART2);
   LL_USART_Enable(USART2);

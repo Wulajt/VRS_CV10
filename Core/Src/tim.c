@@ -26,8 +26,10 @@ static void (* TIM2_process_data)() = 0;
 void setDutyCycle(uint8_t D);
 
 /* USER CODE END 0 */
-
+uint8_t mode_auto = 1;
+uint8_t new_pwm = 0;
 /* TIM2 init function */
+
 void MX_TIM2_Init(void)
 {
   LL_TIM_InitTypeDef TIM_InitStruct = {0};
@@ -74,8 +76,6 @@ void MX_TIM2_Init(void)
   LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH1);
 }
 
-uint8_t mode_auto = 1;
-
 /* USER CODE BEGIN 1 */
 void TIM2_ProcessPWM(void){
 
@@ -92,6 +92,12 @@ void TIM2_ProcessPWM(void){
 			setDutyCycle(led_pwm++);
 			if (led_pwm >= 99) led_cycle = 1;
 		}
+    }else{
+    	if(led_pwm < new_pwm){
+    		setDutyCycle(led_pwm++);
+    	}else if(led_pwm > new_pwm){
+    		setDutyCycle(led_pwm--);
+    	}
     }
 }
 
